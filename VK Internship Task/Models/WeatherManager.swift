@@ -25,20 +25,8 @@ extension WeatherManager {
         return currentWeather
     }
     
-    func setTemperature(to degrees: Double) {
-        currentWeather.temperature = degrees
-    }
-    
-    func getCurrentTemperature() -> Double {
-        return currentWeather.temperature
-    }
-    
-    func setWindSpeed(to speed: Double) {
-        currentWeather.windSpeed = speed
-    }
-    
-    func getWindSpeed() -> Double {
-        return currentWeather.windSpeed
+    func getCurrentWeatherCondition() -> Weather.WeatherConditions {
+        return currentWeather.currentCondition
     }
     
     func getCurrentWeatherBackground() -> UIImage {
@@ -52,7 +40,17 @@ extension WeatherManager {
         case .rain:
             return UIImage(named: "RainyBackground.jpg")!
         case .sun:
-            return UIImage(named: "ClearSkyBackgound.jpg")!
+            return UIImage(named: "SunnyBackground.jpeg")!
         }
+    }
+    
+    func getConditionNames() -> [String] {
+        var result = [String]()
+        
+        for condition in Weather.WeatherConditions.allCases {
+            result.append(condition.rawValue)
+        }
+        
+        return result
     }
 }

@@ -6,16 +6,14 @@
 //
 
 class Weather {
-    enum WeatherConditions: CaseIterable {
-        case rain
-        case clouds
-        case sun
-        case fog
-        case clear
+    enum WeatherConditions: String, CaseIterable {
+        case rain = "Rain"
+        case clouds = "Clouds"
+        case sun = "Sun"
+        case fog = "Fog"
+        case clear = "Clear"
     }
     
-    var temperature: Double = 24.0
-    var windSpeed: Double = 4.5
     var currentCondition: WeatherConditions
     
     init(currentCondition: WeatherConditions) {

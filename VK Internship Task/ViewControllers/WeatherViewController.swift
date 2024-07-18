@@ -8,7 +8,7 @@
 import UIKit
 
 class WeatherViewController: UIViewController {
-
+    
     var weatherManager = WeatherManager()
     
     var weatherSelectorStackView: UIStackView = {
@@ -17,48 +17,9 @@ class WeatherViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.spacing = 6
         
         return stackView
-    }()
-    
-    var temperatureLabel: UILabel = {
-        let label = UILabel()
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(32)
-        
-        return label
-    }()
-    
-    var tempratureStepper: UIStepper = {
-        let stepper = UIStepper()
-        
-        stepper.translatesAutoresizingMaskIntoConstraints = false
-        stepper.stepValue = 0.1
-        stepper.minimumValue = 16.0
-        stepper.maximumValue = 35.0
-        
-        return stepper
-    }()
-    
-    var windSpeedLabel: UILabel = {
-        let label = UILabel()
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(16)
-        
-        return label
-    }()
-    
-    var windSpeedStepper: UIStepper = {
-        let stepper = UIStepper()
-        
-        stepper.translatesAutoresizingMaskIntoConstraints = false
-        stepper.stepValue = 0.1
-        stepper.minimumValue = 0.0
-        stepper.maximumValue = 8.0
-        
-        return stepper
     }()
     
     var backgroundImageView: UIImageView = {
@@ -80,6 +41,31 @@ class WeatherViewController: UIViewController {
     private func setupViews() {
         view.addSubview(backgroundImageView)
         backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
+        
+        setupWeatherSelector()
+        view.addSubview(weatherSelectorStackView)
+    }
+    
+    private func setupWeatherSelector() {
+        let conditionNames = weatherManager.getConditionNames()
+        
+        for name in conditionNames {
+            let button = UIButton()
+            
+            button.setTitle(name, for: .normal)
+            button.layer.cornerRadius = 16
+            button.addTarget(self, action: #selector(weatherSelectorButtonPressed), for: .touchUpInside)
+            
+            let currentCondition = weatherManager.getCurrentWeatherCondition()
+            
+            if name == currentCondition.rawValue {
+                button.backgroundColor = .darkGray
+            } else {
+                button.backgroundColor = .gray
+            }
+            
+            weatherSelectorStackView.addArrangedSubview(button)
+        }
     }
     
     private func setConstraints() {
@@ -88,10 +74,32 @@ class WeatherViewController: UIViewController {
             backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ],
+        weatherSelectorConstraints =
+        [
+            weatherSelectorStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            weatherSelectorStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            weatherSelectorStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            weatherSelectorStackView.heightAnchor.constraint(equalToConstant: 50)
         ]
         
         NSLayoutConstraint.activate(backgroundImageViewConstraints)
+        NSLayoutConstraint.activate(weatherSelectorConstraints)
     }
-
+    
+    @objc func weatherSelectorButtonPressed(_ sender: UIButton) {
+        let choosedCondition = sender.titleLabel?.text
+        let currentCondition = weatherManager.getCurrentWeatherCondition()
+        
+        if choosedCondition != currentCondition.rawValue {
+            weatherSelectorStackView.arrangedSubviews.forEach({ view in
+                view.backgroundColor = .gray
+            })
+            sender.backgroundColor = .darkGray
+            weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: choosedCondition!)!)
+            backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
+        }
+    }
+    
 }
 
