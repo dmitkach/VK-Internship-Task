@@ -11,15 +11,16 @@ class WeatherViewController: UIViewController {
     
     var weatherManager = WeatherManager()
     
-    var weatherSelectorStackView: UIStackView = {
-        let stackView = UIStackView()
+    var weatherSelectorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 6
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.backgroundColor = .clear
+        collection.showsHorizontalScrollIndicator = false
+        collection.translatesAutoresizingMaskIntoConstraints = false
         
-        return stackView
+        return collection
     }()
     
     var backgroundImageView: UIImageView = {
@@ -42,30 +43,10 @@ class WeatherViewController: UIViewController {
         view.addSubview(backgroundImageView)
         backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
         
-        setupWeatherSelector()
-        view.addSubview(weatherSelectorStackView)
-    }
-    
-    private func setupWeatherSelector() {
-        let conditionNames = weatherManager.getConditionNames()
-        
-        for name in conditionNames {
-            let button = UIButton()
-            
-            button.setTitle(name, for: .normal)
-            button.layer.cornerRadius = 16
-            button.addTarget(self, action: #selector(weatherSelectorButtonPressed), for: .touchUpInside)
-            
-            let currentCondition = weatherManager.getCurrentWeatherCondition()
-            
-            if name == currentCondition.rawValue {
-                button.backgroundColor = .darkGray
-            } else {
-                button.backgroundColor = .gray
-            }
-            
-            weatherSelectorStackView.addArrangedSubview(button)
-        }
+        view.addSubview(weatherSelectorCollectionView)
+        weatherSelectorCollectionView.delegate = self
+        weatherSelectorCollectionView.dataSource = self
+        weatherSelectorCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "condition")
     }
     
     private func setConstraints() {
@@ -77,28 +58,40 @@ class WeatherViewController: UIViewController {
         ],
         weatherSelectorConstraints =
         [
-            weatherSelectorStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            weatherSelectorStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            weatherSelectorStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            weatherSelectorStackView.heightAnchor.constraint(equalToConstant: 50)
+            weatherSelectorCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            weatherSelectorCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            weatherSelectorCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            weatherSelectorCollectionView.heightAnchor.constraint(equalToConstant: 50)
         ]
         
         NSLayoutConstraint.activate(backgroundImageViewConstraints)
         NSLayoutConstraint.activate(weatherSelectorConstraints)
     }
     
-    @objc func weatherSelectorButtonPressed(_ sender: UIButton) {
-        let choosedCondition = sender.titleLabel?.text
-        let currentCondition = weatherManager.getCurrentWeatherCondition()
+}
+
+extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Weather.WeatherConditions.allCases.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "condition", for: indexPath) as! WeatherCollectionViewCell
+        let conditionsStrings = weatherManager.getConditionNames()
         
-        if choosedCondition != currentCondition.rawValue {
-            weatherSelectorStackView.arrangedSubviews.forEach({ view in
-                view.backgroundColor = .gray
-            })
-            sender.backgroundColor = .darkGray
-            weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: choosedCondition!)!)
-            backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
-        }
+        cell.weatherConditionLabel.text = conditionsStrings[indexPath.row]
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width / 3, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let conditions = weatherManager.getConditionNames()
+        weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: conditions[indexPath.row])!)
+        backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
     }
     
 }
