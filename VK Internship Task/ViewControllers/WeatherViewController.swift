@@ -91,7 +91,12 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let conditions = weatherManager.getConditionNames()
         weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: conditions[indexPath.row])!)
-        backgroundImageView.image = weatherManager.getCurrentWeatherBackground()
+        
+        UIView.transition(with: backgroundImageView,
+                          duration: 2,
+                          options: [.curveEaseInOut, .transitionCrossDissolve],
+                          animations: { self.backgroundImageView.image =  self.weatherManager.getCurrentWeatherBackground()},
+                          completion: nil)
     }
     
 }
