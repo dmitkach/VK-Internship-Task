@@ -41,6 +41,7 @@ class SunController {
             imageView.frame = CGRect(x: view.center.x + radius, y: view.center.y, width: imageView.frame.width, height: imageView.frame.height)
             imageView.layer.removeAllAnimations()
             path = UIBezierPath()
+            imageView.removeFromSuperview()
         })
         
         view.addSubview(imageView)
