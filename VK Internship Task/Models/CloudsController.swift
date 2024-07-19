@@ -38,7 +38,7 @@ class CloudsController {
                 .maxX, y: view.center.y)
             self.imageView2.frame.origin = CGPoint(x: view.frame
                 .maxX, y: view.center.y - 200)
-        }, completion: { complete in
+        }, completion: { _ in
             self.imageView1.removeFromSuperview()
             self.imageView2.removeFromSuperview()
         })

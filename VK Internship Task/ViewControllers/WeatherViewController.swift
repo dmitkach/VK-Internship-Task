@@ -13,6 +13,7 @@ class WeatherViewController: UIViewController {
     
     var sunController = SunController()
     var cloudsController = CloudsController()
+    var fogController = FogController()
     
     var weatherSelectorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -59,7 +60,7 @@ class WeatherViewController: UIViewController {
         case .clouds:
             cloudsController.animateClouds(view: view)
         case .fog:
-            break
+            fogController.animateFog(view: view)
         case .rain:
             break
         case .sun:
@@ -123,7 +124,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .clouds:
             cloudsController.animateClouds(view: view)
         case .fog:
-            break
+            fogController.animateFog(view: view)
         case .rain:
             break
         case .sun:
