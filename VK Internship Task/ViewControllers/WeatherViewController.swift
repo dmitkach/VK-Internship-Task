@@ -11,6 +11,8 @@ class WeatherViewController: UIViewController {
     
     var weatherManager = WeatherManager()
     
+    var sunController = SunController()
+    
     var weatherSelectorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -47,6 +49,21 @@ class WeatherViewController: UIViewController {
         weatherSelectorCollectionView.delegate = self
         weatherSelectorCollectionView.dataSource = self
         weatherSelectorCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "condition")
+        
+        let inititalCondition = weatherManager.getCurrentWeatherCondition()
+        
+        switch inititalCondition {
+        case .clear:
+            break
+        case .clouds:
+            break
+        case .fog:
+            break
+        case .rain:
+            break
+        case .sun:
+            sunController.animateSun(view: view)
+        }
     }
     
     private func setConstraints() {
@@ -90,6 +107,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let conditions = weatherManager.getConditionNames()
+        let cellCondition = Weather.WeatherConditions(rawValue: conditions[indexPath.row])
         weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: conditions[indexPath.row])!)
         
         UIView.transition(with: backgroundImageView,
@@ -97,6 +115,21 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
                           options: [.curveEaseInOut, .transitionCrossDissolve],
                           animations: { self.backgroundImageView.image =  self.weatherManager.getCurrentWeatherBackground()},
                           completion: nil)
+        
+        switch cellCondition {
+        case .clear:
+            break
+        case .clouds:
+            break
+        case .fog:
+            break
+        case .rain:
+            break
+        case .sun:
+            sunController.animateSun(view: view)
+        case .none:
+            break
+        }
     }
     
 }
