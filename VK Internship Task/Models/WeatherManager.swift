@@ -29,18 +29,18 @@ extension WeatherManager {
         return currentWeather.currentCondition
     }
     
-    func getCurrentWeatherBackground() -> UIImage {
+    func getCurrentWeatherBackground() -> UIImage? {
         switch currentWeather.currentCondition {
         case .clear:
-            return UIImage(named: "ClearSkyBackgound.jpg")!
+            return UIImage(named: "ClearSkyBackgound.jpg")
         case .clouds:
-            return UIImage(named: "CloudsBackground.jpg")!
+            return UIImage(named: "CloudsBackground.jpg")
         case .fog:
-            return UIImage(named: "FoggyBackground.jpg")!
+            return UIImage(named: "FoggyBackground.jpg")
         case .rain:
-            return UIImage(named: "RainyBackground.jpg")!
+            return UIImage(named: "RainyBackground.jpg")
         case .sun:
-            return UIImage(named: "SunnyBackground.jpeg")!
+            return UIImage(named: "SunnyBackground.jpeg")
         }
     }
     

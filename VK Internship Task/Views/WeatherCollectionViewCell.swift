@@ -8,7 +8,7 @@
 import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
-    lazy var weatherConditionLabel: UILabel = {
+   private lazy var weatherConditionLabel: UILabel = {
         let label = UILabel()
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -40,6 +40,10 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         ]
         
         NSLayoutConstraint.activate(labelConstraints)
+    }
+    
+    func configure(with title: String) {
+        weatherConditionLabel.text = title
     }
     
     required init?(coder: NSCoder) {

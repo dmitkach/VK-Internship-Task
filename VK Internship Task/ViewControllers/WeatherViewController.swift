@@ -9,14 +9,14 @@ import UIKit
 
 class WeatherViewController: UIViewController {
     
-    var weatherManager = WeatherManager()
+    private let weatherManager = WeatherManager()
     
-    var sunController = SunController()
-    var cloudsController = CloudsController()
-    var fogController = FogController()
-    var rainController = RainController()
+    private let sunController = SunController()
+    private let cloudsController = CloudsController()
+    private let fogController = FogController()
+    private let rainController = RainController()
     
-    var weatherSelectorCollectionView: UICollectionView = {
+    private let weatherSelectorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
@@ -28,7 +28,7 @@ class WeatherViewController: UIViewController {
         return collection
     }()
     
-    var backgroundImageView: UIImageView = {
+    private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -96,10 +96,12 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "condition", for: indexPath) as! WeatherCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "condition", for: indexPath) as? WeatherCollectionViewCell else {
+            return UICollectionViewCell()
+        }
         let conditionsStrings = weatherManager.getConditionNames()
         
-        cell.weatherConditionLabel.text = conditionsStrings[indexPath.row]
+        cell.configure(with: conditionsStrings[indexPath.row])
         
         return cell
     }
