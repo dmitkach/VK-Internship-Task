@@ -11,7 +11,7 @@ class WeatherManager {
     private var currentWeather: Weather
     
     init() {
-        self.currentWeather = Weather(currentCondition: Weather.WeatherConditions.allCases.randomElement()!)
+        self.currentWeather = Weather(currentCondition: Weather.WeatherConditions.allCases.randomElement() ?? .clear)
     }
 }
 
