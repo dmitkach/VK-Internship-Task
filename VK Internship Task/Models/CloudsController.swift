@@ -44,4 +44,9 @@ class CloudsController {
         })
     }
     
+    func stopAnimating() {
+        imageView1.removeFromSuperview()
+        imageView2.removeFromSuperview()
+    }
+    
 }

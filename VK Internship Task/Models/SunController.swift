@@ -48,5 +48,9 @@ class SunController {
         imageView.layer.add(animation, forKey: nil)
         CATransaction.commit()
     }
+    
+    func stopAnimating() {
+        imageView.removeFromSuperview()
+    }
 }
 

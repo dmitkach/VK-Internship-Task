@@ -32,4 +32,8 @@ class FogController {
             self.imageView.removeFromSuperview()
         })
     }
+    
+    func stopAnimating() {
+        imageView.removeFromSuperview()
+    }
 }

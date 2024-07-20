@@ -14,6 +14,7 @@ class WeatherViewController: UIViewController {
     var sunController = SunController()
     var cloudsController = CloudsController()
     var fogController = FogController()
+    var rainController = RainController()
     
     var weatherSelectorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -62,7 +63,7 @@ class WeatherViewController: UIViewController {
         case .fog:
             fogController.animateFog(view: view)
         case .rain:
-            break
+            rainController.animateRain(view: view)
         case .sun:
             sunController.animateSun(view: view)
         }
@@ -110,6 +111,20 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let conditions = weatherManager.getConditionNames()
         let cellCondition = Weather.WeatherConditions(rawValue: conditions[indexPath.row])
+        
+        switch weatherManager.getCurrentWeatherCondition() {
+        case .rain:
+            rainController.stopAnimating()
+        case .clouds:
+            cloudsController.stopAnimating()
+        case .sun:
+            sunController.stopAnimating()
+        case .fog:
+            fogController.stopAnimating()
+        case .clear:
+            break
+        }
+        
         weatherManager.setWeather(to: Weather.WeatherConditions(rawValue: conditions[indexPath.row])!)
         
         UIView.transition(with: backgroundImageView,
@@ -126,7 +141,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .fog:
             fogController.animateFog(view: view)
         case .rain:
-            break
+            rainController.animateRain(view: view)
         case .sun:
             sunController.animateSun(view: view)
         case .none:
