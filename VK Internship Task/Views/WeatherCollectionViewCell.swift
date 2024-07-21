@@ -28,6 +28,8 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(weatherConditionLabel)
         
         contentView.backgroundColor = .gray
+        contentView.layer.cornerRadius = 15
+        contentView.layer.masksToBounds = true
     }
     
     private func setConstraints() {

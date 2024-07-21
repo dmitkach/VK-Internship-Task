@@ -28,8 +28,9 @@ class CloudsController {
     
     
     func animateClouds(view: UIView) {
-        imageView1.frame = .init(x: view.center.x - imageCloud!.size.width / 4, y: view.center.y, width: imageCloud!.size.width / 4, height: imageCloud!.size.height / 4)
-        imageView2.frame = .init(x: view.center.x - imageCloud!.size.width / 4 - 20, y: view.center.y - 200, width: imageCloud!.size.width / 5, height: imageCloud!.size.height / 5)
+        guard let imageCloud = self.imageCloud else { return }
+        imageView1.frame = .init(x: view.center.x - imageCloud.size.width / 4, y: view.center.y, width: imageCloud.size.width / 4, height: imageCloud.size.height / 4)
+        imageView2.frame = .init(x: view.center.x - imageCloud.size.width / 4 - 20, y: view.center.y - 200, width: imageCloud.size.width / 5, height: imageCloud.size.height / 5)
         view.addSubview(imageView1)
         view.addSubview(imageView2)
         

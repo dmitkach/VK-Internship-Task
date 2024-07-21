@@ -9,20 +9,21 @@ import Foundation
 import UIKit
 
 class FogController {
-    lazy private var imageCloud = UIImage(named: "Fog.png")
+    lazy private var imageFog = UIImage(named: "Fog.png")
     lazy private var imageView: UIImageView = {
         let imageView = UIImageView()
         
-        imageView.image = imageCloud
+        imageView.image = imageFog
         
         return imageView
     }()
     
     func animateFog(view: UIView) {
-        imageView.frame = .init(x: -(imageCloud!.size.width - view.frame.width),
-                                y: view.frame.height - imageCloud!.size.height,
-                                width: imageCloud!.size.width,
-                                height: imageCloud!.size.height)
+        guard let imageFog = self.imageFog else { return }
+        imageView.frame = .init(x: -(imageFog.size.width - view.frame.width),
+                                y: view.frame.height - imageFog.size.height,
+                                width: imageFog.size.width,
+                                height: imageFog.size.height)
         
         view.addSubview(imageView)
         

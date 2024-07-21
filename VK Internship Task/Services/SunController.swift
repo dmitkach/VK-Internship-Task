@@ -25,7 +25,8 @@ class SunController {
         CATransaction.begin()
         
         let radius = 350.0
-        imageView.frame = .init(x: view.center.x - radius, y: view.center.y, width: imageSun!.size.width, height: imageSun!.size.height)
+        guard let imageSun = self.imageSun else { return }
+        imageView.frame = .init(x: view.center.x - radius, y: view.center.y, width: imageSun.size.width, height: imageSun.size.height)
         path.move(to: CGPoint(x: view.center.x - radius, y: view.center.y))
         path.addCurve(to: CGPoint(x: view.center.x + radius, y: view.center.y),
                       controlPoint1: CGPoint(x: view.center.x - radius, y: view.center.y),
